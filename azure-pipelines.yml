@@ -13,7 +13,7 @@ variables:
   - name: servicePrincipalKey
     value: McV8Q~wat9a8sl5OPU0WfSXelugpHqqF.BMRebll  # Replace with your service principal key
   - name: subscriptionId
-    value: 10-am-dxh-dev-01  # Replace with your Azure subscription ID
+    value: 84b1f031-6c6e-4f29-a36c-9c7287d6de1a  # Replace with your Azure subscription ID
   - name: resourceGroupName
     value: SampleWebApp  # Replace with the name of your target resource group
 
