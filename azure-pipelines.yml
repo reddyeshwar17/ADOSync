@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  - name: servicePrincipalId
+    value: 935add4e-7372-4450-bd80-05c6711c0674   # Replace with your service principal ID
+  - name: servicePrincipalKey
+    value: McV8Q~wat9a8sl5OPU0WfSXelugpHqqF.BMRebll  # Replace with your service principal key
+  - name: subscriptionId
+    value: 10-am-dxh-dev-01  # Replace with your Azure subscription ID
+  - name: resourceGroupName
+    value: SampleWebApp  # Replace with the name of your target resource group
+
+stages:
+  - stage: Deploy
+    displayName: Deploy to Azure
+    jobs:
+      - job: Deployment
+        displayName: Deploy to Resource Group
+        pool:
+          vmImage: 'Linux'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.x'
+              addToPath: true
+
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: $(10-am-dxh-dev-01)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                # Login using service principal
+                az login --service-principal -u $(935add4e-7372-4450-bd80-05c6711c0674) -p $(McV8Q~wat9a8sl5OPU0WfSXelugpHqqF.BMRebll) --tenant b4c85df2-2c41-4123-9957-f3c8a360f511  # Replace with your Azure AD tenant ID
+                
+                # Select the target subscription
+                az account set --subscription $(10-am-dxh-dev-01)
+                
+                # Create a resource group
+                az group create --name $(SampleWebApp) --location 'Central India'
+
+                # Other deployment steps go here...
+
