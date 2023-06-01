@@ -9,7 +9,7 @@ trigger:
 
 variables:
   - name: servicePrincipalId
-    value: 935add4e-7372-4450-bd80-05c6711c0674   # Replace with your service principal ID
+    value: 935add4e-7372-4450-bd80-05c6711c0674  # Replace with your service principal ID
   - name: servicePrincipalKey
     value: McV8Q~wat9a8sl5OPU0WfSXelugpHqqF.BMRebll  # Replace with your service principal key
   - name: subscriptionId
@@ -18,8 +18,19 @@ variables:
     value: SampleWebApp  # Replace with the name of your target resource group
 
 stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: 'Linux'
+        steps:
+          - script: echo "Perform build steps here"
+
   - stage: Deploy
     displayName: Deploy to Azure
+    dependsOn: Build
     jobs:
       - job: Deployment
         displayName: Deploy to Resource Group
@@ -33,7 +44,7 @@ stages:
 
           - task: AzureCLI@2
             inputs:
-              azureSubscription: $(10-am-dxh-dev-01)
+              azureSubscription: $(84b1f031-6c6e-4f29-a36c-9c7287d6de1a)
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
@@ -41,7 +52,7 @@ stages:
                 az login --service-principal -u $(935add4e-7372-4450-bd80-05c6711c0674) -p $(McV8Q~wat9a8sl5OPU0WfSXelugpHqqF.BMRebll) --tenant b4c85df2-2c41-4123-9957-f3c8a360f511  # Replace with your Azure AD tenant ID
                 
                 # Select the target subscription
-                az account set --subscription $(10-am-dxh-dev-01)
+                az account set --subscription $(84b1f031-6c6e-4f29-a36c-9c7287d6de1a)
                 
                 # Create a resource group
                 az group create --name $(SampleWebApp) --location 'Central India'
